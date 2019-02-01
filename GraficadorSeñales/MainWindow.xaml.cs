@@ -122,26 +122,116 @@ namespace GraficadorSeñales
                     plnGrafica_Resultado.Points.Add(new Point((muestra.X - transformada.TiempoInicial) * scrContenedor_Resultado.Width, (muestra.Y / transformada.AmplitudMaxima * ((scrContenedor_Resultado.Height / 2) - 30) * -1 + (scrContenedor_Resultado.Height / 2))));
                 }
             }
-            double valorMaximo = 0;
-            int indiceMaximo = 0;
-            int indiceActual = 0;
 
-            foreach(Muestra muestra in transformada.Muestras)
+            int indiceFrecuenciaBaja1 = 0;
+            int indiceFrecuenciaBaja2 = 0;
+            int indiceFrecuenciaAlta1 = 0;
+            int indiceFrecuenciaAlta2 = 0;
+
+            indiceFrecuenciaBaja1 = 680 * transformada.Muestras.Count / (int)señal.FrecuenciaMuestreo;
+            indiceFrecuenciaBaja2 = 1000 * transformada.Muestras.Count / (int)señal.FrecuenciaMuestreo;
+            indiceFrecuenciaAlta1 = 1200 * transformada.Muestras.Count / (int)señal.FrecuenciaMuestreo;
+            indiceFrecuenciaAlta2 = 1500 * transformada.Muestras.Count / (int)señal.FrecuenciaMuestreo;
+
+            double valorMaximoFrecuenciaBaja = 0;
+            int indiceMaximoFrecuenciaBaja = 0;
+
+            for (int indiceActual = indiceFrecuenciaBaja1; indiceActual < indiceFrecuenciaBaja2; indiceActual++)
             {
-                if (muestra.Y > valorMaximo)
+                if (transformada.Muestras[indiceActual].Y > valorMaximoFrecuenciaBaja)
                 {
-                    valorMaximo = muestra.Y;
-                    indiceMaximo = indiceActual;
-                }
-                indiceActual++;
-                if(indiceActual > ((double)transformada.Muestras.Count) / 2.0)
-                {
-                    break;
+                    valorMaximoFrecuenciaBaja = transformada.Muestras[indiceActual].Y;
+                    indiceMaximoFrecuenciaBaja = indiceActual;
                 }
             }
 
-            double frecuenciaFundamental = ((double)indiceMaximo * señal.FrecuenciaMuestreo) / (double)transformada.Muestras.Count;
-            lbl_Hz.Text = frecuenciaFundamental.ToString("F") + " HZ";
+            double valorMaximoFrecuenciaAlta = 0;
+            int indiceMaximoFrecuenciaAlta = 0;
+
+            for (int indiceActual = indiceFrecuenciaAlta1; indiceActual < indiceFrecuenciaAlta2; indiceActual++)
+            {
+                if (transformada.Muestras[indiceActual].Y > valorMaximoFrecuenciaAlta)
+                {
+                    valorMaximoFrecuenciaAlta = transformada.Muestras[indiceActual].Y;
+                    indiceMaximoFrecuenciaAlta = indiceActual;
+                }
+            }
+
+            double frecuenciaFundamentalBaja = (double)indiceMaximoFrecuenciaBaja * señal.FrecuenciaMuestreo / (double)transformada.Muestras.Count;
+            double frecuenciaFundamentalAlta = (double)indiceMaximoFrecuenciaAlta * señal.FrecuenciaMuestreo / (double)transformada.Muestras.Count;
+
+            if (frecuenciaFundamentalBaja > 695 && frecuenciaFundamentalBaja < 699)
+            {
+                if (frecuenciaFundamentalAlta > 1206 && frecuenciaFundamentalAlta < 1215)
+                {
+                    lbl_PadNumerico.Text = "Tecla 1";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1330 && frecuenciaFundamentalAlta < 1340)
+                {
+                    lbl_PadNumerico.Text = "Tecla 2";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1470 && frecuenciaFundamentalAlta < 1480)
+                {
+                    lbl_PadNumerico.Text = "Tecla 3";
+                }
+            }
+            else
+            if (frecuenciaFundamentalBaja > 768 && frecuenciaFundamentalBaja < 772)
+            {
+                if (frecuenciaFundamentalAlta > 1206 && frecuenciaFundamentalAlta < 1215)
+                {
+                    lbl_PadNumerico.Text = "Tecla 4";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1330 && frecuenciaFundamentalAlta < 1340)
+                {
+                    lbl_PadNumerico.Text = "Tecla 5";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1470 && frecuenciaFundamentalAlta < 1480)
+                {
+                    lbl_PadNumerico.Text = "Tecla 6";
+                }
+            }
+            else
+            if (frecuenciaFundamentalBaja > 850 && frecuenciaFundamentalBaja < 854)
+            {
+                if (frecuenciaFundamentalAlta > 1206 && frecuenciaFundamentalAlta < 1215)
+                {
+                    lbl_PadNumerico.Text = "Tecla 7";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1330 && frecuenciaFundamentalAlta < 1340)
+                {
+                    lbl_PadNumerico.Text = "Tecla 8";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1470 && frecuenciaFundamentalAlta < 1480)
+                {
+                    lbl_PadNumerico.Text = "Tecla 9";
+                }
+            }
+            else
+            if (frecuenciaFundamentalBaja > 939 && frecuenciaFundamentalBaja < 943)
+            {
+                if (frecuenciaFundamentalAlta > 1206 && frecuenciaFundamentalAlta < 1215)
+                {
+                    lbl_PadNumerico.Text = "Tecla *";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1330 && frecuenciaFundamentalAlta < 1340)
+                {
+                    lbl_PadNumerico.Text = "Tecla 0";
+                }
+                else
+                if (frecuenciaFundamentalAlta > 1470 && frecuenciaFundamentalAlta < 1480)
+                {
+                    lbl_PadNumerico.Text = "Tecla #";
+                }
+            }
+
 
             // Línea del Eje X
             plnEjeX_Resultado.Points.Clear();
@@ -152,7 +242,6 @@ namespace GraficadorSeñales
             plnEjeY_Resultado.Points.Clear();
             plnEjeY_Resultado.Points.Add(new Point((-transformada.TiempoInicial) * scrContenedor_Resultado.Width, 0));
             plnEjeY_Resultado.Points.Add(new Point((-transformada.TiempoInicial) * scrContenedor_Resultado.Width, scrContenedor_Resultado.Height));
-
         }
 
         private void Examinar_Click(object sender, RoutedEventArgs e)

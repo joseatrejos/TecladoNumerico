@@ -39,7 +39,7 @@
         <TextBlock x:Name="lbl_AmplitudMaxima_Resultado" HorizontalAlignment="Left" Margin="26,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" FontSize="16" Grid.Row="1"/>
         <TextBlock x:Name="lbl_AmplitudMinima_Resultado" HorizontalAlignment="Left" Margin="26,132,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" FontSize="16" Grid.Row="1"/>
         <TextBlock x:Name="lbl_AmplitudCero_Resultado" HorizontalAlignment="Left" Margin="38,69,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" FontSize="16" Grid.Row="1"/>
-        <TextBlock x:Name="lbl_Hz" HorizontalAlignment="Left" Margin="31,181,0,0" TextWrapping="Wrap" Text="0.0 Hz" VerticalAlignment="Top" Width="436" Height="33" FontSize="20" Grid.Row="1"/>
+        <TextBlock x:Name="lbl_PadNumerico" HorizontalAlignment="Left" Margin="31,181,0,0" TextWrapping="Wrap" Text=" - " VerticalAlignment="Top" Width="436" Height="33" FontSize="20" Grid.Row="1"/>
         <TextBlock x:Name="lbl_RutaArchivo" HorizontalAlignment="Left" Margin="255,109,0,0" TextWrapping="Wrap" Text="Ruta del archivo" VerticalAlignment="Top"/>
         <TextBox x:Name="txt_RutaArchivo" HorizontalAlignment="Left" Height="23" Margin="255,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="312"/>
         <Button Content="Examinar" HorizontalAlignment="Left" Margin="584,133,0,0" VerticalAlignment="Top" Width="75" Click="Examinar_Click"/>
