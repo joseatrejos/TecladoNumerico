@@ -34,71 +34,74 @@ namespace GraficadorSeñales
 
         private void BotonGraficar_Click(object sender, RoutedEventArgs e)
         {
-            var reader = new AudioFileReader(txt_RutaArchivo.Text);
-
-            double tiempoInicial = 0;
-            double tiempoFinal = reader.TotalTime.TotalSeconds;
-            double frecuenciaMuestreo = reader.WaveFormat.SampleRate;
-            
-            txt_TiempoInicial.Text = "0";
-            txt_TiempoFinal.Text = tiempoFinal.ToString();
-            txt_FrecuenciaDeMuestreo.Text = frecuenciaMuestreo.ToString();
-
-            señal = new SeñalPersonalizada();
-
-            // Primer Señal
-            señal.TiempoInicial = tiempoInicial;
-            señal.TiempoFinal = tiempoFinal;
-            señal.FrecuenciaMuestreo = frecuenciaMuestreo;
-
-            // Construir nuestra señal a trávés del archivo de audio
-            var bufferLectura = new float[reader.WaveFormat.Channels];
-            int muestrasLeidas = 1;
-            double instanteActual = 0;
-            double intervaloMuestra = 1.0 / frecuenciaMuestreo;
-
-            do
+            if(txt_RutaArchivo.Text != "")
             {
-                muestrasLeidas = reader.Read(bufferLectura, 0, reader.WaveFormat.Channels);
-                if(muestrasLeidas > 0)
+                var reader = new AudioFileReader(txt_RutaArchivo.Text);
+
+                double tiempoInicial = 0;
+                double tiempoFinal = reader.TotalTime.TotalSeconds;
+                double frecuenciaMuestreo = reader.WaveFormat.SampleRate;
+
+                txt_TiempoInicial.Text = "0";
+                txt_TiempoFinal.Text = tiempoFinal.ToString();
+                txt_FrecuenciaDeMuestreo.Text = frecuenciaMuestreo.ToString();
+
+                señal = new SeñalPersonalizada();
+
+                // Primer Señal
+                señal.TiempoInicial = tiempoInicial;
+                señal.TiempoFinal = tiempoFinal;
+                señal.FrecuenciaMuestreo = frecuenciaMuestreo;
+
+                // Construir nuestra señal a trávés del archivo de audio
+                var bufferLectura = new float[reader.WaveFormat.Channels];
+                int muestrasLeidas = 1;
+                double instanteActual = 0;
+                double intervaloMuestra = 1.0 / frecuenciaMuestreo;
+
+                do
                 {
-                    double max = bufferLectura.Take(muestrasLeidas).Max();
-                    señal.Muestras.Add(new Muestra(instanteActual, max));
-                }
-                instanteActual += intervaloMuestra;
-            } while (muestrasLeidas > 0);
-            
-            // Actualizar
-            señal.actualizarAmplitudMaxima();
+                    muestrasLeidas = reader.Read(bufferLectura, 0, reader.WaveFormat.Channels);
+                    if (muestrasLeidas > 0)
+                    {
+                        double max = bufferLectura.Take(muestrasLeidas).Max();
+                        señal.Muestras.Add(new Muestra(instanteActual, max));
+                    }
+                    instanteActual += intervaloMuestra;
+                } while (muestrasLeidas > 0);
 
-            // Definición de la amplitud máxima en función de la señal de mayor amplitud
-            amplitudMaxima = señal.AmplitudMaxima;
+                // Actualizar
+                señal.actualizarAmplitudMaxima();
 
-            // Limpieza de polylines
-            plnGrafica.Points.Clear();
+                // Definición de la amplitud máxima en función de la señal de mayor amplitud
+                amplitudMaxima = señal.AmplitudMaxima;
 
-            // Impresión de la amplitud máxima en los labels de la ventana.
-            lbl_AmplitudMaxima.Text = amplitudMaxima.ToString("F");
-            lbl_AmplitudMinima.Text = "-" + amplitudMaxima.ToString("F");
+                // Limpieza de polylines
+                plnGrafica.Points.Clear();
 
-            if (señal != null)
-            {
-                // Sirve para recorrer una coleccion o arreglo
-                foreach (Muestra muestra in señal.Muestras)
+                // Impresión de la amplitud máxima en los labels de la ventana.
+                lbl_AmplitudMaxima.Text = amplitudMaxima.ToString("F");
+                lbl_AmplitudMinima.Text = "-" + amplitudMaxima.ToString("F");
+
+                if (señal != null)
                 {
-                    plnGrafica.Points.Add(new Point((muestra.X - tiempoInicial) * scrContenedor.Width, (muestra.Y / amplitudMaxima * ((scrContenedor.Height / 2) - 30) * -1 + (scrContenedor.Height / 2))));
+                    // Sirve para recorrer una coleccion o arreglo
+                    foreach (Muestra muestra in señal.Muestras)
+                    {
+                        plnGrafica.Points.Add(new Point((muestra.X - tiempoInicial) * scrContenedor.Width, (muestra.Y / amplitudMaxima * ((scrContenedor.Height / 2) - 30) * -1 + (scrContenedor.Height / 2))));
+                    }
                 }
+
+                // Línea del Eje X
+                plnEjeX.Points.Clear();
+                plnEjeX.Points.Add(new Point(0, scrContenedor.Height / 2));
+                plnEjeX.Points.Add(new Point((tiempoFinal - tiempoInicial) * scrContenedor.Width, scrContenedor.Height / 2));
+
+                // Línea del Eje Y
+                plnEjeY.Points.Clear();
+                plnEjeY.Points.Add(new Point((-tiempoInicial) * scrContenedor.Width, 0));
+                plnEjeY.Points.Add(new Point((-tiempoInicial) * scrContenedor.Width, scrContenedor.Height));
             }
-
-            // Línea del Eje X
-            plnEjeX.Points.Clear();
-            plnEjeX.Points.Add(new Point(0, scrContenedor.Height / 2));
-            plnEjeX.Points.Add(new Point((tiempoFinal - tiempoInicial) * scrContenedor.Width, scrContenedor.Height / 2));
-
-            // Línea del Eje Y
-            plnEjeY.Points.Clear();
-            plnEjeY.Points.Add(new Point((-tiempoInicial) * scrContenedor.Width, 0));
-            plnEjeY.Points.Add(new Point((-tiempoInicial) * scrContenedor.Width, scrContenedor.Height));
         }
 
         private void BotonTransformadadeFourier_Click(object sender, RoutedEventArgs e)
@@ -231,7 +234,6 @@ namespace GraficadorSeñales
                     lbl_PadNumerico.Text = "Tecla #";
                 }
             }
-
 
             // Línea del Eje X
             plnEjeX_Resultado.Points.Clear();
